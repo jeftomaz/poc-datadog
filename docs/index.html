@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POC Datadog — Observabilidade na Manutenção de Software</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · CAPA -->
+  <section class="slide cover active">
+    <div class="slide-body">
+      <div class="badge-dd">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M20 5c-1.6 1.2-3 1.8-4.6 1.8-2.4 0-4-1.6-6.8-1.6C5.4 5.2 3 7.4 3 10.6c0 3.4 2.6 5.4 5.6 5.4 1.2 0 2.2-.3 3-.8l-.2 2.2-2 .6.2 1.8 3.4-1 1-9.2c1.2-.2 2.2-.7 3-1.4z" stroke="#c4b5fd" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        Datadog · Observabilidade
+      </div>
+      <h1>Observabilidade na <span class="accent">Manutenção</span> de Software</h1>
+      <div class="sub">Prova de Conceito · Datadog + Node.js</div>
+      <div class="students">
+        <div class="chip"><span>Aluno</span>Ícaro Costa Pavan</div>
+        <div class="chip"><span>Aluno</span>Jeferson Tomaz</div>
+        <div class="chip"><span>Aluno</span>João Lucas Rissi</div>
+      </div>
+      <div class="course-line">Manutenção de Software · UNAERP · 2026</div>
+    </div>
+  </section>
+
+  <!-- 2 · O PROBLEMA -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 1 · <b>Ícaro</b></div>
+    <div class="eyebrow">O problema</div>
+    <h2>Software em produção é uma <span class="accent">caixa-preta</span></h2>
+    <div class="slide-body">
+      <p class="lead">Manter um sistema não é só corrigir bugs: é entender o que ele faz <strong>enquanto roda</strong>. Sem visibilidade, a equipe descobre falhas pelo cliente, e o diagnóstico vira tentativa e erro.</p>
+      <div class="cards three" style="margin-top:38px">
+        <div class="card">
+          <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+          <h3>Reativo</h3>
+          <p>O problema só aparece quando alguém reclama. O time apaga incêndios em vez de preveni-los.</p>
+        </div>
+        <div class="card">
+          <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></div>
+          <h3>MTTR alto</h3>
+          <p>Sem dados, achar a causa-raiz leva horas. Cada minuto parado custa confiança e dinheiro.</p>
+        </div>
+        <div class="card">
+          <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg></div>
+          <h3>Adivinhação</h3>
+          <p>"Funciona na minha máquina." Sem telemetria, decisões de manutenção são chutes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · TRÊS PILARES -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 1 · <b>Ícaro</b></div>
+    <div class="eyebrow">Os três pilares</div>
+    <h2>Métricas, Traces e Logs</h2>
+    <div class="slide-body">
+      <p class="lead">A observabilidade responde três perguntas diferentes. Juntas, elas reconstroem a história completa de cada requisição.</p>
+      <div class="cards three" style="margin-top:34px">
+        <div class="card">
+          <div class="k">Métricas</div>
+          <div class="q">Quanto?</div>
+          <h3>O panorama</h3>
+          <p>Valores numéricos no tempo: requisições/s, latência p95, taxa de erros, uso de heap. Mostram <strong>tendências</strong> e disparam alertas.</p>
+        </div>
+        <div class="card">
+          <div class="k">Traces</div>
+          <div class="q">Onde?</div>
+          <h3>O caminho</h3>
+          <p>Cada requisição vira uma árvore de spans. Revelam <strong>onde</strong> o tempo é gasto e qual camada falhou.</p>
+        </div>
+        <div class="card">
+          <div class="k">Logs</div>
+          <div class="q">Por quê?</div>
+          <h3>O detalhe</h3>
+          <p>Eventos textuais com contexto. Explicam <strong>por que</strong> algo aconteceu — a evidência fina do diagnóstico.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · ARQUITETURA -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 1 · <b>Ícaro</b></div>
+    <div class="eyebrow">Arquitetura</div>
+    <h2>Como a telemetria chega ao Datadog</h2>
+    <div class="slide-body" style="justify-content:center">
+      <svg viewBox="0 0 1180 380" style="width:100%;height:auto;max-height:60vh" xmlns="http://www.w3.org/2000/svg" font-family="var(--mono)">
+        <defs>
+          <linearGradient id="gp" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#632ca6"/>
+          </linearGradient>
+          <marker id="arr" markerWidth="11" markerHeight="11" refX="8" refY="5" orient="auto">
+            <path d="M0,0 L9,5 L0,10 z" fill="#a78bfa"/>
+          </marker>
+          <filter id="gl" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- host box -->
+        <rect x="20" y="40" width="700" height="300" rx="18" fill="none" stroke="#2e2350" stroke-width="1.5" stroke-dasharray="6 6"/>
+        <text x="44" y="74" fill="#6f6499" font-size="15" letter-spacing="2">DOCKER COMPOSE · host docker-desktop</text>
+
+        <!-- app -->
+        <rect x="60" y="120" width="270" height="160" rx="16" fill="#1a1232" stroke="#8b5cf6" stroke-width="1.6"/>
+        <text x="84" y="158" fill="#a78bfa" font-size="15" letter-spacing="2">CONTAINER</text>
+        <text x="84" y="192" fill="#ece8fb" font-size="26" font-weight="700">poc-datadog-app</text>
+        <text x="84" y="224" fill="#9a8fc4" font-size="17">Node · Express · dd-trace</text>
+        <text x="84" y="250" fill="#9a8fc4" font-size="17">Winston (logs JSON)</text>
+
+        <!-- agent -->
+        <rect x="430" y="120" width="250" height="160" rx="16" fill="#221842" stroke="#a78bfa" stroke-width="1.6" filter="url(#gl)"/>
+        <text x="454" y="158" fill="#a78bfa" font-size="15" letter-spacing="2">SIDECAR</text>
+        <text x="454" y="192" fill="#ece8fb" font-size="24" font-weight="700">datadog-agent</text>
+        <text x="454" y="224" fill="#9a8fc4" font-size="17">datadog/agent:7</text>
+        <text x="454" y="250" fill="#9a8fc4" font-size="17">APM · Logs · Métricas</text>
+
+        <!-- cloud -->
+        <rect x="820" y="120" width="320" height="160" rx="16" fill="url(#gp)" opacity=".92"/>
+        <text x="852" y="160" fill="#ece8fb" font-size="15" letter-spacing="2" opacity=".85">SAAS</text>
+        <text x="852" y="196" fill="#fff" font-size="26" font-weight="800">Datadog</text>
+        <text x="852" y="228" fill="#ece8fb" font-size="18">us5.datadoghq.com</text>
+        <text x="852" y="254" fill="#ece8fb" font-size="15" opacity=".85">Dashboards · Monitors · APM</text>
+
+        <!-- arrows app -> agent -->
+        <line x1="330" y1="178" x2="425" y2="178" stroke="#a78bfa" stroke-width="2.2" marker-end="url(#arr)"/>
+        <text x="338" y="168" fill="#c4b5fd" font-size="14">traces :8126</text>
+        <line x1="330" y1="222" x2="425" y2="222" stroke="#a78bfa" stroke-width="2.2" marker-end="url(#arr)"/>
+        <text x="338" y="244" fill="#c4b5fd" font-size="14">métricas :8125</text>
+
+        <!-- logs via docker.sock -->
+        <path d="M195 280 L195 322 L520 322 L520 282" fill="none" stroke="#60a5fa" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arr)"/>
+        <text x="250" y="345" fill="#60a5fa" font-size="14">logs · /var/run/docker.sock (collect all)</text>
+
+        <!-- arrow agent -> cloud -->
+        <line x1="680" y1="200" x2="815" y2="200" stroke="#a78bfa" stroke-width="2.6" marker-end="url(#arr)"/>
+        <text x="700" y="190" fill="#c4b5fd" font-size="14">HTTPS · API key</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 5 · STACK -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 2 · <b>Jeferson</b></div>
+    <div class="eyebrow">Stack tecnológica</div>
+    <h2>O que compõe a POC</h2>
+    <div class="slide-body">
+      <table>
+        <thead><tr><th>Componente</th><th>Papel</th><th class="mono">Versão</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Node.js + Express</td><td>Framework web da API</td><td class="mono">express 5.2.1</td></tr>
+          <tr><td class="mono">dd-trace</td><td>Instrumentação APM e injeção de trace</td><td class="mono">5.104.0</td></tr>
+          <tr><td class="mono">Winston</td><td>Logger estruturado em JSON</td><td class="mono">3.19.0</td></tr>
+          <tr><td class="mono">datadog-agent</td><td>Coleta e envio da telemetria</td><td class="mono">agent:7</td></tr>
+          <tr><td class="mono">Docker Compose</td><td>Orquestração app + agente</td><td class="mono">2 serviços</td></tr>
+          <tr><td class="mono">Datadog SaaS</td><td>Backend de observabilidade</td><td class="mono">us5.datadoghq.com</td></tr>
+        </tbody>
+      </table>
+      <p class="lead" style="margin-top:24px">Tags de unificação aplicadas via env: <strong>DD_SERVICE</strong>, <strong>DD_ENV</strong>, <strong>DD_VERSION</strong> — ligam métricas, traces e logs ao mesmo serviço.</p>
+    </div>
+  </section>
+
+  <!-- 6 · INSTRUMENTAÇÃO -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 2 · <b>Jeferson</b></div>
+    <div class="eyebrow">Instrumentação</div>
+    <h2>tracer.js — uma linha que vê tudo</h2>
+    <div class="slide-body">
+      <div class="split wide-left">
+        <div class="code">
+          <div class="bar"><i style="background:#f87171"></i><i style="background:#fbbf24"></i><i style="background:#4ade80"></i><span class="fn">app/src/tracer.js</span></div>
+<pre><span class="tok-com">// carregado ANTES de tudo (1ª linha do server.js)</span>
+<span class="tok-key">const</span> tracer = <span class="tok-fn">require</span>(<span class="tok-str">'dd-trace'</span>).<span class="tok-fn">init</span>({
+  <span class="tok-prop">logInjection</span>: <span class="tok-key">true</span>,    <span class="tok-com">// injeta trace_id nos logs</span>
+  <span class="tok-prop">runtimeMetrics</span>: <span class="tok-key">true</span>,  <span class="tok-com">// heap, event loop, GC</span>
+  <span class="tok-prop">env</span>: process.env.<span class="tok-prop">DD_ENV</span>,
+  <span class="tok-prop">service</span>: process.env.<span class="tok-prop">DD_SERVICE</span>,
+  <span class="tok-prop">version</span>: process.env.<span class="tok-prop">DD_VERSION</span>,
+});
+
+module.exports = tracer;</pre>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:18px;justify-content:center">
+          <div class="card"><div class="k">logInjection</div><p style="margin-top:8px">Acrescenta <strong>trace_id</strong> e <strong>span_id</strong> a cada log. É o que costura log ↔ trace automaticamente.</p></div>
+          <div class="card"><div class="k">runtimeMetrics</div><p style="margin-top:8px">Coleta métricas do runtime Node — <strong>heap</strong>, event loop e GC — sem código extra.</p></div>
+          <div class="card"><div class="k">Ordem importa</div><p style="margin-top:8px">O <code style="font-family:var(--mono);color:var(--lilac)">require('./tracer')</code> é a <strong>primeira</strong> linha: instrumenta as libs antes do Express carregar.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · LOGS + CORRELAÇÃO -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 2 · <b>Jeferson</b></div>
+    <div class="eyebrow">Logs estruturados</div>
+    <h2>Correlação trace ↔ log</h2>
+    <div class="slide-body">
+      <div class="split">
+        <div class="code" style="align-self:start">
+          <div class="bar"><i style="background:#f87171"></i><i style="background:#fbbf24"></i><i style="background:#4ade80"></i><span class="fn">app/src/logger.js</span></div>
+<pre><span class="tok-key">const</span> winston = <span class="tok-fn">require</span>(<span class="tok-str">'winston'</span>);
+
+<span class="tok-key">const</span> logger = winston.<span class="tok-fn">createLogger</span>({
+  <span class="tok-prop">level</span>: <span class="tok-str">'info'</span>,
+  <span class="tok-prop">format</span>: winston.format.<span class="tok-fn">combine</span>(
+    winston.format.<span class="tok-fn">timestamp</span>(),
+    winston.format.<span class="tok-fn">json</span>()   <span class="tok-com">// saída JSON</span>
+  ),
+  <span class="tok-prop">transports</span>: [<span class="tok-key">new</span> winston.transports.<span class="tok-fn">Console</span>()],
+});</pre>
+        </div>
+        <div class="ph">
+          <div class="frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg></div>
+          <div class="label">[ evidência: correlação log ↔ trace ]</div>
+          <div class="hint">Span GET /health com a aba <b>Logs (Trace 2)</b> aberta — "Health check executed" e "HTTP request completed" sob o mesmo trace_id. (tracer_health_detailed_logs)</div>
+        </div>
+      </div>
+      <p class="lead" style="margin-top:22px">Log em JSON + <strong>logInjection</strong> = clique no span e veja exatamente os logs daquela requisição. Fim do <code style="font-family:var(--mono);color:var(--lilac)">grep</code> no escuro.</p>
+    </div>
+  </section>
+
+  <!-- 8 · ENDPOINTS -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 2 · <b>Jeferson</b></div>
+    <div class="eyebrow">Endpoints de teste</div>
+    <h2>Cenários que geram telemetria</h2>
+    <div class="slide-body">
+      <table>
+        <thead><tr><th class="mono">Rota</th><th>O que faz</th><th>Status</th><th>Sinal observável</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">GET /health</td><td>Health check simples</td><td><span class="pill g">200</span></td><td>Trace rápido + log info</td></tr>
+          <tr><td class="mono">GET /products</td><td>Lista produtos (JSON)</td><td><span class="pill g">200</span></td><td>Trace de caso feliz</td></tr>
+          <tr><td class="mono">GET /slow</td><td>Atraso proposital de 3s</td><td><span class="pill a">200</span></td><td>Latência alta no flame graph</td></tr>
+          <tr><td class="mono">GET /error</td><td>Responde 500 manualmente</td><td><span class="pill r">500</span></td><td>Erro na taxa + log error</td></tr>
+          <tr><td class="mono">GET /throw</td><td>Lança exceção não tratada</td><td><span class="pill r">500</span></td><td>Span marcado com <code style="font-family:var(--mono);color:var(--lilac)">error.type</code></td></tr>
+        </tbody>
+      </table>
+      <p class="lead" style="margin-top:22px">Cada rota cobre um pilar: o caso feliz, a <strong>latência</strong> (/slow), o erro controlado (/error) e a <strong>exceção</strong> que vira Error Tracking (/throw).</p>
+    </div>
+  </section>
+
+  <!-- 9 · ROTEIRO DEMO -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 3 · <b>João Lucas</b></div>
+    <div class="eyebrow">Demonstração ao vivo</div>
+    <h2>Roteiro da demo</h2>
+    <div class="slide-body">
+      <div class="check">
+        <div class="item"><div class="num">1</div><div class="txt">Disparar tráfego: <b>/health</b>, <b>/products</b>, <b>/slow</b>, <b>/error</b>, <b>/throw</b></div><div class="ep">terminal · curl</div></div>
+        <div class="item"><div class="num">2</div><div class="txt">Abrir o <b>Trace Explorer</b> e mostrar os spans coloridos por status</div><div class="ep">APM</div></div>
+        <div class="item"><div class="num">3</div><div class="txt">Entrar no <b>flame graph do /slow</b> — duração ~3,01s visível</div><div class="ep">trace</div></div>
+        <div class="item"><div class="num">4</div><div class="txt">Mostrar a <b>correlação log ↔ trace</b> em um span de /health</div><div class="ep">logs</div></div>
+        <div class="item"><div class="num">5</div><div class="txt">Abrir o <b>Dashboard</b>: req/s, taxa de erros, latência p95, heap</div><div class="ep">dashboard</div></div>
+        <div class="item"><div class="num">6</div><div class="txt">Exibir o <b>Monitor</b> de taxa de erros e o alerta por e-mail</div><div class="ep">monitor</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · PROBLEMAS E SOLUÇÕES -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 3 · <b>João Lucas</b></div>
+    <div class="eyebrow">Aprendizados</div>
+    <h2>Problemas encontrados &amp; soluções</h2>
+    <div class="slide-body">
+      <div class="ps">
+        <div class="row">
+          <div class="prob">
+            <div class="tag">● Problema</div>
+            <h4>Logs não apareciam no Datadog</h4>
+            <p>O agente coletava traces e métricas, mas a aba de Logs ficava vazia. A coleta de logs de containers não estava habilitada.</p>
+          </div>
+          <div class="sol">
+            <div class="tag">● Solução</div>
+            <h4>Habilitar o Logs Agent</h4>
+            <p>No agente: <code>DD_LOGS_ENABLED=true</code> + <code>DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true</code>, e a label <code>com.datadoghq.ad.logs</code> no container da app indicando <code>source: nodejs</code>.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="prob">
+            <div class="tag">● Problema</div>
+            <h4>Logs chegavam como texto cru / JSON inválido</h4>
+            <p>Sem formato JSON, o Datadog tratava cada linha como string solta — sem nível, sem atributos, sem correlação com o trace.</p>
+          </div>
+          <div class="sol">
+            <div class="tag">● Solução</div>
+            <h4>Winston em JSON + logInjection</h4>
+            <p>Padronizar a saída com <code>winston.format.json()</code> e ativar <code>logInjection</code> no dd-trace. Os logs passaram a ser parseados e ligados ao <code>trace_id</code>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · CONCLUSÃO -->
+  <section class="slide">
+    <div class="owner"><span class="dot"></span> Bloco 3 · <b>João Lucas</b></div>
+    <div class="eyebrow">Conclusão</div>
+    <h2>O que a observabilidade entrega à manutenção</h2>
+    <div class="slide-body">
+      <div class="takeaways">
+        <div class="ta">
+          <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+          <h3>Detecção proativa</h3>
+          <p>Monitores avisam antes do usuário. O time age sobre o sintoma, não sobre a reclamação.</p>
+        </div>
+        <div class="ta">
+          <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg></div>
+          <h3>Diagnóstico rápido</h3>
+          <p>Trace mostra <strong>onde</strong>, log mostra <strong>por quê</strong>. MTTR cai de horas para minutos.</p>
+        </div>
+        <div class="ta">
+          <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+          <h3>Tendências</h3>
+          <p>Métricas ao longo do tempo guiam decisões de refatoração e capacidade — manutenção baseada em dados.</p>
+        </div>
+      </div>
+      <p class="lead" style="margin-top:34px;text-align:center;align-self:center">Observabilidade transforma manutenção <strong>reativa</strong> em manutenção <strong>orientada por evidências</strong>.</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- chrome -->
+<div class="footer-id">POC Datadog · poc-datadog-api</div>
+<div class="dots" id="dots"></div>
+<div class="hud">
+  <span class="counter"><b id="cur">01</b> / <span id="tot">11</span></span>
+  <button class="btn" id="prev" aria-label="Anterior">‹</button>
+  <button class="btn" id="next" aria-label="Próximo">›</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

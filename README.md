@@ -1,7 +1,9 @@
 # POC Datadog — Monitoramento de API Node.js
 
-> Disciplina de Manutenção de Software  
-> Aluno: Jeferson Tomaz | UNAERP
+> Disciplina de Manutenção de Software\
+> Alunos:\
+> Ícaro Costa Pavan, Jeferson Tomaz, João Lucas Rissi\
+> UNAERP
 
 ---
 
@@ -105,6 +107,12 @@ curl http://localhost:3000/products
 curl http://localhost:3000/slow
 curl http://localhost:3000/error
 curl http://localhost:3000/throw
+```
+
+**Forçar o envio de muitos erros:**
+```bash
+for i in {1..20}; do curl http://localhost:3000/error; curl http://localhost:3000/throw; done
+
 ```
 
 ---
